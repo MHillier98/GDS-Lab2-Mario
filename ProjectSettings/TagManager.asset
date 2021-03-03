@@ -3,7 +3,15 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Mario
+  - Floor
+  - Block
+  - Goomba
+  - Koopa
+  - Flag
+  - Coin
+  - Pickup
   layers:
   - Default
   - TransparentFX
