@@ -1232,27 +1232,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46c9193a4bb95254e81875acfd875039, type: 3}
---- !u!1 &2074360969 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2473256135372722862, guid: f8c65584f158d334f8ac2afaab5371a7, type: 3}
-  m_PrefabInstance: {fileID: 2473256134422503791}
-  m_PrefabAsset: {fileID: 0}
---- !u!70 &2074360970
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2074360969}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.75, y: 1}
-  m_Direction: 0
 --- !u!1001 &2473256134422503791
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1260,10 +1239,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2074360970, guid: f8c65584f158d334f8ac2afaab5371a7, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2473256135372722858, guid: f8c65584f158d334f8ac2afaab5371a7, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -1312,6 +1287,5 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mario
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2074360970, guid: f8c65584f158d334f8ac2afaab5371a7, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8c65584f158d334f8ac2afaab5371a7, type: 3}
