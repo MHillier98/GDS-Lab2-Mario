@@ -4,42 +4,42 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private Rigidbody2D rb2d;
-    private readonly float thrust = 14000.0f;
-    private readonly float movementSpeed = 5.0f;
+    private Rigidbody2D rb;
+
+    private float horizontalMovement;
+    private float speed = 7f;
+    private float jumpForce = 200f;
+    public bool isGrounded = false;
 
     private void Start()
     {
-        rb2d = gameObject.GetComponent<Rigidbody2D>();
+        rb = gameObject.GetComponent<Rigidbody2D>();
     }
 
     private void Update()
     {
-        Move();
-    }
-
-    private void Move()
-    {
-        float horizontalMovement = Input.GetAxis("Horizontal");
-
-        transform.Translate(transform.right * horizontalMovement * movementSpeed * Time.deltaTime);
-
-        if (Input.GetKeyDown(KeyCode.Space) && OnGround())
+        if (isGrounded)
         {
-            rb2d.AddForce(transform.up * thrust);
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                rb.AddForce(Vector2.up * jumpForce * 120f);
+            }
+            isGrounded = false;
         }
     }
 
-    private bool OnGround()
+    private void FixedUpdate()
     {
-        float offset = 0.37f;
+        horizontalMovement = Input.GetAxis("Horizontal");
 
-        Vector2 leftRayPos = new Vector2(transform.position.x + offset, transform.position.y);
-        Vector2 rightRayPos = new Vector2(transform.position.x - offset, transform.position.y);
+        rb.AddForce(new Vector2(horizontalMovement * speed * 7f, rb.velocity.y));
+    }
 
-        //Debug.DrawRay(leftRayPos, -Vector3.up);
-        //Debug.DrawRay(rightRayPos, -Vector3.up);
-
-        return Physics2D.Raycast(leftRayPos, -Vector3.up, 1.2f) || Physics2D.Raycast(rightRayPos, -Vector3.up, 1.2f);
+    public void OnTriggerStay2D(Collider2D collider)
+    {
+        if (collider.tag == "Block")
+        {
+            isGrounded = true;
+        }
     }
 }
