@@ -4,12 +4,20 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField]
     private Rigidbody2D rb;
 
+    [SerializeField]
+    private readonly float speed = 5f;
+
+    [SerializeField]
+    private readonly float jumpForce = 220f;
+
+    [SerializeField]
     private float horizontalMovement;
-    private float speed = 7f;
-    private float jumpForce = 200f;
-    public bool isGrounded = false;
+
+    [SerializeField]
+    private bool isGrounded = false;
 
     private void Start()
     {
