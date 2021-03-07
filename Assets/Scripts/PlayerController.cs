@@ -4,24 +4,19 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField]
     private Rigidbody2D rb;
+    private Animator animator;
 
-    [SerializeField]
     private readonly float speed = 5f;
-
-    [SerializeField]
     private readonly float jumpForce = 220f;
 
-    [SerializeField]
     private float horizontalMovement;
-
-    [SerializeField]
     private bool isGrounded = false;
 
     private void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -34,13 +29,26 @@ public class PlayerController : MonoBehaviour
             }
             isGrounded = false;
         }
+        GroundCheck();
     }
 
     private void FixedUpdate()
     {
         horizontalMovement = Input.GetAxis("Horizontal");
-
         rb.AddForce(new Vector2(horizontalMovement * speed * 7f, rb.velocity.y));
+
+        bool isRunning = horizontalMovement != 0 ? true : false;
+        animator.SetBool("IsRunning", isRunning);
+    }
+
+    private void GroundCheck()
+    {
+        float offset = 0.37f;
+        Vector2 leftRayPos = new Vector2(transform.position.x + offset, transform.position.y);
+        Vector2 rightRayPos = new Vector2(transform.position.x - offset, transform.position.y);
+
+        bool onGround = Physics2D.Raycast(leftRayPos, -Vector3.up, 0.8f) || Physics2D.Raycast(rightRayPos, -Vector3.up, 0.8f);
+        animator.SetBool("IsGrounded", onGround);
     }
 
     public void OnTriggerStay2D(Collider2D collider)
