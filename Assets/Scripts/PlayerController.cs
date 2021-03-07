@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,9 +14,7 @@ public class PlayerController : MonoBehaviour
     private readonly float jumpForce = 220f;
 
     private float horizontalMovement;
-    private bool isGrounded = false;
-
-    private bool MushroomPickup = false;
+    private bool isGrounded = false, MushroomPickup = false, MarioDead = false;
 
     public bool BigMario = false;
 
@@ -41,6 +40,10 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("MushroomGet", true);
             BigMario = true;
             StartCoroutine(MushroomAnim());
+        }
+        if(MarioDead)
+        {
+            ResetLevel();
         }
 
         GroundCheck();
@@ -90,11 +93,21 @@ public class PlayerController : MonoBehaviour
             MushroomPickup = true;
             Destroy(collider.gameObject);
         }
+        if (collider.tag == "OutOfBounds")
+        {
+            MarioDead = true;
+            //Debug.Log("Player dead");
+        }
     }
 
     IEnumerator MushroomAnim()
     {
         yield return new WaitForSeconds(1.0f);
         MushroomPickup = false;
+    }
+   
+    public void ResetLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
