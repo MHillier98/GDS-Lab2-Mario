@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
     private Animator animator;
+    SpriteRenderer Sprite;
 
     private readonly float speed = 5f;
     private readonly float jumpForce = 220f;
@@ -13,10 +14,15 @@ public class PlayerController : MonoBehaviour
     private float horizontalMovement;
     private bool isGrounded = false;
 
+    private bool MushroomPickup = false;
+
+    public bool BigMario = false;
+
     private void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        Sprite = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -29,16 +35,37 @@ public class PlayerController : MonoBehaviour
             }
             isGrounded = false;
         }
+        if(MushroomPickup)
+        {
+            animator.SetBool("MushroomGet", true);
+            BigMario = true;
+            StartCoroutine(MushroomAnim());
+        }
+
         GroundCheck();
     }
 
     private void FixedUpdate()
     {
-        horizontalMovement = Input.GetAxis("Horizontal");
-        rb.AddForce(new Vector2(horizontalMovement * speed * 7f, rb.velocity.y));
+        if (!MushroomPickup)
+        {
+            horizontalMovement = Input.GetAxis("Horizontal");
+            Vector2 MovementDir = new Vector2(horizontalMovement * speed * 7f, rb.velocity.y);
 
-        bool isRunning = horizontalMovement != 0 ? true : false;
-        animator.SetBool("IsRunning", isRunning);
+            rb.AddForce(MovementDir);
+
+            if(MovementDir.x > 0)
+            {
+                Sprite.flipX = false;
+            }
+            if(MovementDir.x < 0)
+            {
+                Sprite.flipX = true;
+            }
+
+            bool isRunning = horizontalMovement != 0 ? true : false;
+            animator.SetBool("IsRunning", isRunning);
+        }
     }
 
     private void GroundCheck()
@@ -57,5 +84,16 @@ public class PlayerController : MonoBehaviour
         {
             isGrounded = true;
         }
+        if(collider.tag == "Pickup")
+        {
+            MushroomPickup = true;
+            Destroy(collider.gameObject);
+        }
+    }
+
+    IEnumerator MushroomAnim()
+    {
+        yield return new WaitForSeconds(1.0f);
+        MushroomPickup = false;
     }
 }

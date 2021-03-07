@@ -162,8 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4567c2b1c01a3c4b83948246aee06da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalMovement: 0
-  isGrounded: 0
+  MushroomPickup: 0
 --- !u!95 &7348827867128527865
 Animator:
   serializedVersion: 3
