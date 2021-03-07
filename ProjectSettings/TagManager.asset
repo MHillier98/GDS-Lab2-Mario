@@ -12,6 +12,7 @@ TagManager:
   - Flag
   - Coin
   - Pickup
+  - OutOfBounds
   layers:
   - Default
   - TransparentFX

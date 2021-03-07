@@ -1,22 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
     private Animator animator;
 
+    private SpriteRenderer Sprite;
+
     private readonly float speed = 5f;
     private readonly float jumpForce = 220f;
 
     private float horizontalMovement;
-    private bool isGrounded = false;
+    private bool isGrounded = false, MushroomPickup = false, MarioDead = false;
+
+    public bool BigMario = false;
 
     private void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        Sprite = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -29,16 +35,41 @@ public class PlayerController : MonoBehaviour
             }
             isGrounded = false;
         }
+        if(MushroomPickup)
+        {
+            animator.SetBool("MushroomGet", true);
+            BigMario = true;
+            StartCoroutine(MushroomAnim());
+        }
+        if(MarioDead)
+        {
+            ResetLevel();
+        }
+
         GroundCheck();
     }
 
     private void FixedUpdate()
     {
-        horizontalMovement = Input.GetAxis("Horizontal");
-        rb.AddForce(new Vector2(horizontalMovement * speed * 7f, rb.velocity.y));
+        if (!MushroomPickup)
+        {
+            horizontalMovement = Input.GetAxis("Horizontal");
+            Vector2 MovementDir = new Vector2(horizontalMovement * speed * 7f, rb.velocity.y);
 
-        bool isRunning = horizontalMovement != 0 ? true : false;
-        animator.SetBool("IsRunning", isRunning);
+            rb.AddForce(MovementDir);
+
+            if(MovementDir.x > 0)
+            {
+                Sprite.flipX = false;
+            }
+            if(MovementDir.x < 0)
+            {
+                Sprite.flipX = true;
+            }
+
+            bool isRunning = horizontalMovement != 0 ? true : false;
+            animator.SetBool("IsRunning", isRunning);
+        }
     }
 
     private void GroundCheck()
@@ -57,5 +88,26 @@ public class PlayerController : MonoBehaviour
         {
             isGrounded = true;
         }
+        if(collider.tag == "Pickup")
+        {
+            MushroomPickup = true;
+            Destroy(collider.gameObject);
+        }
+        if (collider.tag == "OutOfBounds")
+        {
+            MarioDead = true;
+            //Debug.Log("Player dead");
+        }
+    }
+
+    IEnumerator MushroomAnim()
+    {
+        yield return new WaitForSeconds(1.0f);
+        MushroomPickup = false;
+    }
+   
+    public void ResetLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
