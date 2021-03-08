@@ -7,21 +7,17 @@ public class KupaController : MonoBehaviour
     private Rigidbody2D rb;
     private float speed = 2f;
     public GameObject shell;
-    
-    // Start is called before the first frame update
+
     void Start()
     {
         rb = this.GetComponent<Rigidbody2D>();
-        
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         rb.velocity = new Vector2(-speed, 0f);
     }
 
-    
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Mario")
@@ -37,7 +33,6 @@ public class KupaController : MonoBehaviour
         if (collision.collider.tag == "Mario")
         {
             Destroy(collision.gameObject);
-           
         }
     }
 }
