@@ -16,6 +16,8 @@ TagManager:
   - OutOfBounds
   - BreakableBlock
   - CoinBlock
+  - EnemyHead
+  - Pipes
   layers:
   - Default
   - TransparentFX
@@ -25,7 +27,7 @@ TagManager:
   - UI
   - Koopa
   - Shell
-  - 
+  - Mushroom
   - 
   - 
   - 
