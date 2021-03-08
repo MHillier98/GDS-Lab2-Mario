@@ -18,11 +18,22 @@ public class PlayerController : MonoBehaviour
 
     public bool BigMario = false;
 
+    public Gumber goomba;
+    public float bounceOnEnemy;
+
+    private static bool goingDown = false;
+    public Animator goingDownPipe;
+
     private void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         Sprite = GetComponent<SpriteRenderer>();
+
+        //Referencing Goomba
+        GameObject g = GameObject.FindGameObjectWithTag("Goomba");
+        goomba = g.GetComponent<Gumber>();
+
     }
 
     private void Update()
@@ -100,6 +111,24 @@ public class PlayerController : MonoBehaviour
             MarioDead = true;
             //Debug.Log("Player dead");
         }
+
+        //Goomba Kill Collision
+        if (collider.tag == "EnemyHead")
+        {
+            goomba.stomped = true;
+            Debug.Log("Goomba Dead");
+            rb.velocity = new Vector2(rb.velocity.x, bounceOnEnemy);
+        }
+
+        /*
+        //Going Down Pipe
+        if (collider.tag == "PipeDown" && Input.GetKeyDown('S'))
+        {
+            goingDown = true;
+            StartCoroutine(PipeDown());
+            
+        }
+        */
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -124,5 +153,15 @@ public class PlayerController : MonoBehaviour
     public void ResetLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    //Coroutine for the going down pipe 
+    private IEnumerator PipeDown()
+    {
+        Debug.Log("Going Down Pipe");
+        yield return new WaitForSeconds(1f);
+        goingDown = false;
+        Debug.Log("Loading Underground");
+        //SceneManager.LoadScene(Underground);
     }
 }
