@@ -12,12 +12,12 @@ public class ShellController : MonoBehaviour
     void Start()
     {
         rb = this.GetComponent<Rigidbody2D>();
-        rb.velocity = new Vector2(-speed, 0f);
+       
        
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         if (rb.velocity != new Vector2(0f, 0f))
         {
@@ -27,15 +27,11 @@ public class ShellController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Mario" && isMoving == false)
-        {
-            Destroy(gameObject);
-            
-        }
-        else if (collision.tag == "Mario" && isMoving == true)
+        
+        if (collision.tag == "Mario" && isMoving == true)
         {
             rb.velocity = new Vector2(0f, 0f);
-            collision.attachedRigidbody.velocity = new Vector2(0f, 5f);
+            collision.attachedRigidbody.AddForce(Vector2.up * 5f);
             isMoving = false;
         }
     }

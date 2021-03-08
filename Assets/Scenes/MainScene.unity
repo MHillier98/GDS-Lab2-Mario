@@ -167,7 +167,7 @@ Transform:
   - {fileID: 1207555824}
   - {fileID: 1668881688}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1038225643
 GameObject:
@@ -319,6 +319,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2473256135372722862, guid: f8c65584f158d334f8ac2afaab5371a7, type: 3}
       propertyPath: m_Name
+      value: Mario
+      objectReference: {fileID: 0}
+    - target: {fileID: 2473256135372722862, guid: f8c65584f158d334f8ac2afaab5371a7, type: 3}
+      propertyPath: m_TagString
       value: Mario
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -9431,7 +9435,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3108230700285842090, guid: b2e35f3c0ee591b4d903226b5db4be54, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3108230700285842090, guid: b2e35f3c0ee591b4d903226b5db4be54, type: 3}
       propertyPath: m_LocalPosition.x

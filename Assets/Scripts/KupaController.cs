@@ -18,7 +18,7 @@ public class KupaController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        rb.velocity = new Vector2(-speed, 0f);
+        rb.velocity = new Vector2(-speed, rb.velocity.y);
     }
 
     
