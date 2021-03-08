@@ -15,7 +15,7 @@ public class KupaController : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.velocity = new Vector2(-speed, 0f);
+        rb.velocity = new Vector2(-speed, rb.velocity.y);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

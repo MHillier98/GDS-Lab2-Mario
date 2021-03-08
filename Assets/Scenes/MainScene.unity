@@ -321,6 +321,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mario
       objectReference: {fileID: 0}
+    - target: {fileID: 2473256135372722862, guid: f8c65584f158d334f8ac2afaab5371a7, type: 3}
+      propertyPath: m_TagString
+      value: Mario
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8c65584f158d334f8ac2afaab5371a7, type: 3}
 --- !u!1 &1207555823
