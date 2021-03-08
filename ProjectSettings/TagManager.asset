@@ -12,6 +12,7 @@ TagManager:
   - Flag
   - Coin
   - Pickup
+  - Shell
   - OutOfBounds
   layers:
   - Default

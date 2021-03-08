@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+
     private Rigidbody2D rb;
     private Animator animator;
 
@@ -99,7 +100,19 @@ public class PlayerController : MonoBehaviour
             //Debug.Log("Player dead");
         }
     }
-
+private void OnCollisionEnter2D(Collision2D collision)
+    {
+        
+        if (collision.collider.tag == "Shell" && collision.collider is BoxCollider2D)
+        {
+            collision.rigidbody.velocity = new Vector2(-10f, 0f);
+            
+        }
+        else if (collision.collider.tag == "Shell" && collision.collider is CircleCollider2D)
+        {
+            collision.rigidbody.velocity = new Vector2(10f, 0f);
+        }
+      }
     IEnumerator MushroomAnim()
     {
         yield return new WaitForSeconds(1.0f);
