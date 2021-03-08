@@ -21,12 +21,23 @@ public class PlayerController : MonoBehaviour
     public bool BigMario = false;
     public Text coinCountText;
 
+    public Gumber goomba;
+    public float bounceOnEnemy;
+
+    private static bool goingDown = false;
+    public Animator goingDownPipe;
+
     private void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         Sprite = GetComponent<SpriteRenderer>();
+        
         coinCount=0;
+
+        //Referencing Goomba
+        GameObject g = GameObject.FindGameObjectWithTag("Goomba");
+        goomba = g.GetComponent<Gumber>();
     }
 
     private void Update()
@@ -35,22 +46,29 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                rb.AddForce(Vector2.up * jumpForce * 120f);
+                Jump();
             }
             isGrounded = false;
         }
-        if(MushroomPickup)
+
+        if (MushroomPickup)
         {
             animator.SetBool("MushroomGet", true);
             BigMario = true;
             StartCoroutine(MushroomAnim());
         }
-        if(MarioDead)
+
+        if (MarioDead)
         {
             ResetLevel();
         }
 
         GroundCheck();
+    }
+
+    private void Jump()
+    {
+        rb.AddForce(Vector2.up * jumpForce * 120f);
     }
 
     private void FixedUpdate()
@@ -62,11 +80,11 @@ public class PlayerController : MonoBehaviour
 
             rb.AddForce(MovementDir);
 
-            if(MovementDir.x > 0)
+            if (MovementDir.x > 0)
             {
                 Sprite.flipX = false;
             }
-            if(MovementDir.x < 0)
+            else if (MovementDir.x < 0)
             {
                 Sprite.flipX = true;
             }
@@ -110,7 +128,7 @@ public class PlayerController : MonoBehaviour
             if(BigMario==true)
                 Destroy(collider.gameObject,0.01f);
         }
-        if(collider.tag == "Pickup")
+        if (collider.tag == "Pickup")
         {
             MushroomPickup = true;
             Destroy(collider.gameObject);
@@ -126,6 +144,36 @@ public class PlayerController : MonoBehaviour
             MarioDead = true;
             //Debug.Log("Player dead");
         }
+
+        //Goomba Kill Collision
+        if (collider.tag == "EnemyHead")
+        {
+            goomba.stomped = true;
+            //Debug.Log("Goomba Dead");
+            Jump();
+        }
+
+        /*
+        //Going Down Pipe
+        if (collider.tag == "PipeDown" && Input.GetKeyDown('S'))
+        {
+            goingDown = true;
+            StartCoroutine(PipeDown());
+            
+        }
+        */
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.tag == "Shell" && collision.collider is BoxCollider2D)
+        {
+            collision.rigidbody.velocity = new Vector2(-10f, 0f);
+        }
+        else if (collision.collider.tag == "Shell" && collision.collider is CircleCollider2D)
+        {
+            collision.rigidbody.velocity = new Vector2(10f, 0f);
+        }
     }
 
     IEnumerator MushroomAnim()
@@ -133,9 +181,19 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         MushroomPickup = false;
     }
-   
+
     public void ResetLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    //Coroutine for the going down pipe 
+    private IEnumerator PipeDown()
+    {
+        Debug.Log("Going Down Pipe");
+        yield return new WaitForSeconds(1f);
+        goingDown = false;
+        Debug.Log("Loading Underground");
+        //SceneManager.LoadScene(Underground);
     }
 }
