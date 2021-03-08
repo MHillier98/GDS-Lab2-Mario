@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                rb.AddForce(Vector2.up * jumpForce * 120f);
+                Jump();
             }
             isGrounded = false;
         }
@@ -60,6 +60,11 @@ public class PlayerController : MonoBehaviour
         }
 
         GroundCheck();
+    }
+
+    private void Jump()
+    {
+        rb.AddForce(Vector2.up * jumpForce * 120f);
     }
 
     private void FixedUpdate()
@@ -116,8 +121,8 @@ public class PlayerController : MonoBehaviour
         if (collider.tag == "EnemyHead")
         {
             goomba.stomped = true;
-            Debug.Log("Goomba Dead");
-            rb.velocity = new Vector2(rb.velocity.x, bounceOnEnemy);
+            //Debug.Log("Goomba Dead");
+            Jump();
         }
 
         /*
