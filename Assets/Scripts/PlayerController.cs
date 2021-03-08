@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,14 +16,17 @@ public class PlayerController : MonoBehaviour
 
     private float horizontalMovement;
     private bool isGrounded = false, MushroomPickup = false, MarioDead = false;
+    private int coinCount;
 
     public bool BigMario = false;
+    public Text coinCountText;
 
     private void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         Sprite = GetComponent<SpriteRenderer>();
+        coinCount=0;
     }
 
     private void Update()
@@ -88,9 +92,20 @@ public class PlayerController : MonoBehaviour
         {
             isGrounded = true;
         }
+        if (collider.tag == "BreakableBlock")
+        {
+            if(BigMario==true)
+                Destroy(collider.gameObject,0.01f);
+        }
         if(collider.tag == "Pickup")
         {
             MushroomPickup = true;
+            Destroy(collider.gameObject);
+        }
+        if(collider.tag == "Coin")
+        {
+            coinCount++;
+            coinCountText.text = "x"+coinCount;
             Destroy(collider.gameObject);
         }
         if (collider.tag == "OutOfBounds")

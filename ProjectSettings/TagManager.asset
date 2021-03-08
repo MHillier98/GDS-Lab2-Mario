@@ -13,6 +13,8 @@ TagManager:
   - Coin
   - Pickup
   - OutOfBounds
+  - BreakableBlock
+  - CoinBlock
   layers:
   - Default
   - TransparentFX
