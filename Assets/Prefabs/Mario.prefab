@@ -162,7 +162,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4567c2b1c01a3c4b83948246aee06da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MushroomPickup: 0
+  BigMario: 0
+  goomba: {fileID: 0}
+  bounceOnEnemy: 0
+  goingDownPipe: {fileID: 0}
 --- !u!95 &7348827867128527865
 Animator:
   serializedVersion: 3

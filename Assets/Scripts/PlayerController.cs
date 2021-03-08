@@ -138,7 +138,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-
         if (collision.collider.tag == "Shell" && collision.collider is BoxCollider2D)
         {
             collision.rigidbody.velocity = new Vector2(-10f, 0f);
