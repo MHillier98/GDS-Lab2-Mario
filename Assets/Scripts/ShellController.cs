@@ -4,16 +4,13 @@ using UnityEngine;
 
 public class ShellController : MonoBehaviour
 {
-
     bool isMoving = false;
     Rigidbody2D rb;
     float speed = 8f;
-    // Start is called before the first frame update
+
     void Start()
     {
         rb = this.GetComponent<Rigidbody2D>();
-       
-       
     }
 
     // Update is called once per frame
@@ -26,8 +23,7 @@ public class ShellController : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
-    {
-        
+    {        
         if (collision.tag == "Mario" && isMoving == true)
         {
             rb.velocity = new Vector2(0f, 0f);
@@ -41,11 +37,6 @@ public class ShellController : MonoBehaviour
         if (collision.collider.tag == "Mario" && isMoving == true)
         {
             Destroy(collision.gameObject);
-
         }
-        
-        
     }
-
-    
 }
