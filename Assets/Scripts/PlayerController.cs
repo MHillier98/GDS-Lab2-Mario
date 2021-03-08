@@ -86,6 +86,19 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("IsGrounded", onGround);
     }
 
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.tag == "CoinBlock")
+        {
+            CoinBlock hitBlock = collider.GetComponent<CoinBlock>();
+            if(hitBlock.hitCount>0){
+                coinCount++;
+                coinCountText.text = "x"+coinCount;
+                hitBlock.hitCount--;
+            }
+        }
+    }
+
     public void OnTriggerStay2D(Collider2D collider)
     {
         if (collider.tag == "Block")
