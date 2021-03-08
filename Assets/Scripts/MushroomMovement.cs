@@ -13,14 +13,13 @@ public class MushroomMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //rb = gameObject.GetComponent<Rigidbody2D>();
         rb = this.GetComponent<Rigidbody2D>();
         Sprite = GetComponent<SpriteRenderer>();
     }
 
     void Update()
     {
-        //HittingWall = Physics2D.OverlapCircle(WallCheck.position, WallCheckRadius, WallLayer);
+
     }
 
     // Update is called once per frame

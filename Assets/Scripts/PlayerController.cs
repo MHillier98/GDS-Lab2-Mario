@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     public Animator goingDownPipe;
 
     public GameObject MushroomPrefab;
+    public GameObject CoinPrefab;
 
     private void Start()
     {
@@ -135,13 +136,11 @@ public class PlayerController : MonoBehaviour
         {
             if (BigMario)
             {
+                //PlayAnimation
                 Destroy(collider.gameObject, 0.01f);
             }
             if(!BigMario)
             {
-                //BoxMoving = true;
-                //collider.gameObject.GetComponent<BoxMovement>().Movement = true;
-                //GameObject Parent = collider.gameObject.GetComponentInParent<GameObject>();
                 Animator Anim = collider.gameObject.GetComponentInParent<Animator>();
                 collider.gameObject.GetComponentInParent<Animator>().SetBool("BlockHit", true);
                 StartCoroutine(ResetBlock(Anim));
@@ -158,15 +157,17 @@ public class PlayerController : MonoBehaviour
                 Vector2 SpawnPos = new Vector2(CurrentPos.x, CurrentPos.y);
                 SpawnPos.y = CurrentPos.y + 1;
                 SpawnPos.x = CurrentPos.x - 0.5f;
-
-                StartCoroutine(ResetBlock(Anim));
+ 
                 if (collider.gameObject.GetComponentInChildren<CoinBlock>().Coin)
                 {
+                    GameObject Coin = Instantiate(CoinPrefab, SpawnPos, Quaternion.identity) as GameObject;
+                    StartCoroutine(ResetCoin(Anim, Coin));                   
                     coinCount++;
                     coinCountText.text = "x" + coinCount;
                 }
                 else if (collider.gameObject.GetComponentInChildren<CoinBlock>().Mushroom)
                 {
+                    StartCoroutine(ResetBlock(Anim));
                     GameObject Mushroom = Instantiate(MushroomPrefab, SpawnPos, Quaternion.identity) as GameObject;
                 }
             }
@@ -229,6 +230,13 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.3f);
         Anim.SetBool("BlockHit", false);
+    }
+
+    IEnumerator ResetCoin(Animator Anim, GameObject CoinObject)
+    {
+        yield return new WaitForSeconds(0.3f);
+        Anim.SetBool("BlockHit", false);
+        Destroy(CoinObject);
     }
 
     public void ResetLevel()

@@ -44,19 +44,10 @@ public class CoinBlock : MonoBehaviour
             //spriteRenderer.sprite = disabledSprite;
             //gameObject.GetComponentInParent<Animator>().SetBool("BlockHit", true);
             Anim.SetBool("Disabled", true);
-            //gameObject.GetComponentInParent<Animator>();
-            //Coin anim + block going up
         }
         if (Mushroom && BlockHit)
         {
-            
-            //Vector2 CurrentPos = gameObject.transform.position;
-            //Vector2 MushroomPos = new Vector2(CurrentPos.x, CurrentPos.y);
-            //MushroomPos.y = CurrentPos.y + 3;
-            //GameObject Mush = Instantiate(MushroomPrefab, MushroomPos, Quaternion.identity) as GameObject;
             Anim.SetBool("Disabled", true);
-            //Instantiate mushroom into scene
-            //block anim going up
         }
     }
 }
