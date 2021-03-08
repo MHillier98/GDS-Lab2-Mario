@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,8 +16,10 @@ public class PlayerController : MonoBehaviour
 
     private float horizontalMovement;
     private bool isGrounded = false, MushroomPickup = false, MarioDead = false;
+    private int coinCount;
 
     public bool BigMario = false;
+    public Text coinCountText;
 
     public Gumber goomba;
     public float bounceOnEnemy;
@@ -29,11 +32,12 @@ public class PlayerController : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         Sprite = GetComponent<SpriteRenderer>();
+        
+        coinCount=0;
 
         //Referencing Goomba
         GameObject g = GameObject.FindGameObjectWithTag("Goomba");
         goomba = g.GetComponent<Gumber>();
-
     }
 
     private void Update()
@@ -100,18 +104,42 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("IsGrounded", onGround);
     }
 
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.tag == "CoinBlock")
+        {
+            CoinBlock hitBlock = collider.GetComponent<CoinBlock>();
+            if(hitBlock.hitCount>0){
+                coinCount++;
+                coinCountText.text = "x"+coinCount;
+                hitBlock.hitCount--;
+            }
+        }
+    }
+
     public void OnTriggerStay2D(Collider2D collider)
     {
         if (collider.tag == "Block")
         {
             isGrounded = true;
         }
-        else if (collider.tag == "Pickup")
+        if (collider.tag == "BreakableBlock")
+        {
+            if(BigMario==true)
+                Destroy(collider.gameObject,0.01f);
+        }
+        if (collider.tag == "Pickup")
         {
             MushroomPickup = true;
             Destroy(collider.gameObject);
         }
-        else if (collider.tag == "OutOfBounds")
+        if(collider.tag == "Coin")
+        {
+            coinCount++;
+            coinCountText.text = "x"+coinCount;
+            Destroy(collider.gameObject);
+        }
+        if (collider.tag == "OutOfBounds")
         {
             MarioDead = true;
             //Debug.Log("Player dead");
