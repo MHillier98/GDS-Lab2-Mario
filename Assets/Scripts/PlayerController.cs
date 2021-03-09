@@ -21,10 +21,7 @@ public class PlayerController : MonoBehaviour
     public bool BigMario = false;
     public Text coinCountText;
 
-    public Gumber goomba;
-    public float bounceOnEnemy;
-
-    private static bool goingDown = false;
+    //private bool goingDown = false;
     public Animator goingDownPipe;
 
     public GameObject MushroomPrefab;
@@ -37,10 +34,6 @@ public class PlayerController : MonoBehaviour
         Sprite = GetComponent<SpriteRenderer>();
         
         coinCount=0;
-
-        //Referencing Goomba
-        GameObject g = GameObject.FindGameObjectWithTag("Goomba");
-        goomba = g.GetComponent<Gumber>();
     }
 
     private void Update()
@@ -192,8 +185,8 @@ public class PlayerController : MonoBehaviour
         //Goomba Kill Collision
         if (collider.tag == "EnemyHead")
         {
-            goomba.stomped = true;
-            //Debug.Log("Goomba Dead");
+            Gumber gumba = collider.gameObject.GetComponent<Gumber>();
+            gumba.stomped = true;
             Jump();
         }
 
@@ -249,7 +242,7 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Going Down Pipe");
         yield return new WaitForSeconds(1f);
-        goingDown = false;
+        //goingDown = false;
         Debug.Log("Loading Underground");
         //SceneManager.LoadScene(Underground);
     }
