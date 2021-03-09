@@ -583,7 +583,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &353261645
 GameObject:
@@ -1045,9 +1045,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
-  m_Children:
-  - {fileID: 69259710}
-  - {fileID: 684489213}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2397,9 +2395,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2473256135372722857, guid: f8c65584f158d334f8ac2afaab5371a7, type: 3}
+      propertyPath: Lives
+      value: 
+      objectReference: {fileID: 1073633265}
+    - target: {fileID: 2473256135372722857, guid: f8c65584f158d334f8ac2afaab5371a7, type: 3}
+      propertyPath: Score
+      value: 
+      objectReference: {fileID: 992240247}
+    - target: {fileID: 2473256135372722857, guid: f8c65584f158d334f8ac2afaab5371a7, type: 3}
       propertyPath: coinCountText
       value: 
-      objectReference: {fileID: 69259711}
+      objectReference: {fileID: 636316945}
     - target: {fileID: 2473256135372722858, guid: f8c65584f158d334f8ac2afaab5371a7, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -13526,7 +13532,7 @@ RectTransform:
   - {fileID: 1332122903}
   - {fileID: 716920708}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

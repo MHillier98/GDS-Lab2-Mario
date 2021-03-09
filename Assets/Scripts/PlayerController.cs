@@ -36,7 +36,6 @@ public class PlayerController : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         Sprite = GetComponent<SpriteRenderer>();
-        
     }
 
     private void Update()
@@ -49,6 +48,7 @@ public class PlayerController : MonoBehaviour
                 {
                     Jump();
                 }
+
                 isGrounded = false;
             }
         }
@@ -63,9 +63,13 @@ public class PlayerController : MonoBehaviour
         if (MarioDead)
         {
             StartCoroutine(BeginReset());
-            
         }
-        coinCountText.text = coinCount.ToString();
+
+        if (coinCountText != null)
+        {
+            coinCountText.text = coinCount.ToString();
+        }
+
         Lives.text = lifeRemaining.ToString();
         Score.text = scoreCount.ToString();
         GroundCheck();
@@ -105,39 +109,19 @@ public class PlayerController : MonoBehaviour
         {
             lifeRemaining = 3;
             coinCount = 0;
-
         }
-    } 
+    }
 
     private void GroundCheck()
     {
         float offsetX = 0.37f;
         float offsetY = IsBig ? -0.5f : 0.0f;
-        
+
         Vector2 leftRayPos = new Vector2(transform.position.x + offsetX, transform.position.y + offsetY);
         Vector2 rightRayPos = new Vector2(transform.position.x - offsetX, transform.position.y + offsetY);
 
         bool onGround = Physics2D.Raycast(leftRayPos, -Vector3.up, 0.8f) || Physics2D.Raycast(rightRayPos, -Vector3.up, 0.8f);
         animator.SetBool("IsGrounded", onGround);
-    }
-
-    void OnTriggerEnter2D(Collider2D collider)
-    {
-/*        if (collider.tag == "CoinBlock")
-        {
-            collider.gameObject.GetComponentInChildren<CoinBlock>().BlockHit = true;
-            collider.gameObject.GetComponentInParent<Animator>().SetBool("BlockHit", true);
-            collider.gameObject.GetComponentInParent<Animator>().SetBool("BlockHit", true);
-            if(collider.gameObject.GetComponentInChildren<CoinBlock>().Coin)
-            if(collider.gameObject.GetComponentInChildren<CoinBlock>().Coin)
-                coinCount++;
-            CoinBlock hitBlock = collider.GetComponent<CoinBlock>();
-            if(hitBlock.hitCount>0){
-               coinCount++;
-                coinCountText.text = "x"+coinCount;
-                hitBlock.hitCount--;
-             }
-        }*/
     }
 
     public void OnTriggerStay2D(Collider2D collider)
@@ -146,22 +130,23 @@ public class PlayerController : MonoBehaviour
         {
             isGrounded = true;
         }
+
         if (collider.tag == "BreakableBlock")
         {
             if (IsBig)
             {
                 //PlayAnimation
                 Destroy(collider.gameObject, 0.01f);
-               
             }
-            if(!IsBig)
+            else
             {
                 Animator Anim = collider.gameObject.GetComponentInParent<Animator>();
                 collider.gameObject.GetComponentInParent<Animator>().SetBool("BlockHit", true);
                 StartCoroutine(ResetBlock(Anim));
             }
         }
-        if(collider.tag == "CoinBlock")
+
+        if (collider.tag == "CoinBlock")
         {
             if (collider.gameObject.GetComponentInChildren<CoinBlock>().BlockHit == false)
             {
@@ -187,20 +172,25 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+
         if (collider.tag == "Pickup")
         {
-            if(!IsBig)
+            if (!IsBig)
+            {
                 MushroomPickup = true;
+            }
             //animator.SetBool("MushroomGet", false);
             //animator.SetBool("IsBig", MushroomPickup);
             Destroy(collider.gameObject);
             scoreCount += 1000;
         }
-        if(collider.tag == "Coin")
+
+        if (collider.tag == "Coin")
         {
             coinCount++;
             Destroy(collider.gameObject);
         }
+
         if (collider.tag == "OutOfBounds")
         {
             MarioDead = true;
@@ -215,7 +205,7 @@ public class PlayerController : MonoBehaviour
             Jump();
         }
 
-        if(collider.tag == "Goomba")
+        if (collider.tag == "Goomba")
         {
             if (!IsBig && !IsHit)
             {
@@ -225,15 +215,6 @@ public class PlayerController : MonoBehaviour
                 Vector2 EndPos = transform.position;
                 EndPos.y = EndPos.y + 1;
                 StartCoroutine(MarioDeath(StartPos, EndPos, 1.0f));
-
-                //StartCoroutine(MarioDeath());
-                //ParentObject.GetComponentInParent<Animator>().SetBool("IsDead", true);
-                //Animator ParentAnim = gameObject.GetComponentInParent<Animator>();
-                //ParentAnim.SetBool("IsDead", true);
-                //Begin death animation
-                //MarioDead = true;
-                //rb.
-                //ParentObject.GetComponent<Animator>().SetBool("IsDead", true);
             }
             else if (IsBig)
             {
@@ -246,33 +227,31 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if(collider.tag == "Flag")
+        if (collider.tag == "Flag")
         {
             Frozen = true;
-            if(IsBig)
+            if (IsBig)
             {
                 //BigAnim
                 animator.SetBool("FlagGrab", true);
             }
-            else if(!IsBig)
+            else
             {
                 animator.SetBool("FlagGrab", true);
             }
+
             rb.gravityScale = 2;
             rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
 
             StartCoroutine(VictoryAnimation());
         }
 
-        /*
         //Going Down Pipe
-        if (collider.tag == "PipeDown" && Input.GetKeyDown('S'))
-        {
-            goingDown = true;
-            StartCoroutine(PipeDown());
-            
-        }
-        */
+        //if (collider.tag == "PipeDown" && Input.GetKeyDown('S'))
+        //{
+        //    goingDown = true;
+        //    StartCoroutine(PipeDown());
+        //}
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -280,13 +259,12 @@ public class PlayerController : MonoBehaviour
         if (collision.collider.tag == "Shell" && collision.collider is BoxCollider2D)
         {
             collision.rigidbody.velocity = new Vector2(-10f, collision.rigidbody.velocity.y);
-        
+
         }
         else if (collision.collider.tag == "Shell" && collision.collider is CircleCollider2D)
         {
             collision.rigidbody.velocity = new Vector2(10f, collision.rigidbody.velocity.y);
         }
-        
     }
 
     IEnumerator MushroomAnim()
@@ -309,31 +287,37 @@ public class PlayerController : MonoBehaviour
     IEnumerator VictoryAnimation()
     {
         yield return new WaitForSeconds(1.5f);
-        if(IsBig)
+        if (IsBig)
         {
             animator.SetBool("VictoryRun", true);
             //BigRun
         }
-        else if (!IsBig)
+        else
         {
             animator.SetBool("VictoryRun", true);
             //SmallRun
         }
+
         Vector2 CurrentPos = transform.position;
         Vector2 CastlePos = transform.position;
         CastlePos.x = transform.position.x + 7f;
-        if (!IsBig)
-            CastlePos.y = transform.position.y - 1f;
-        else if (IsBig)
-            CastlePos.y = transform.position.y - 0.5f;
-        StartCoroutine(Victory(CurrentPos, CastlePos, 3.0f));
 
+        if (!IsBig)
+        {
+            CastlePos.y = transform.position.y - 1f;
+        }
+        else
+        {
+            CastlePos.y = transform.position.y - 0.5f;
+        }
+
+        StartCoroutine(Victory(CurrentPos, CastlePos, 3.0f));
     }
 
     IEnumerator Victory(Vector2 Current, Vector2 End, float Duration)
     {
         float Timer = 0;
-        while(Timer < Duration)
+        while (Timer < Duration)
         {
             transform.position = Vector2.Lerp(Current, End, Timer / Duration);
             Timer += Time.deltaTime;
@@ -384,7 +368,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator DeathDownAnim(Vector2 Start, Vector2 End, float Duration)
     {
         float Timer = 0;
-        while(Timer < Duration)
+        while (Timer < Duration)
         {
             transform.position = Vector2.Lerp(Start, End, Timer / Duration);
             Timer += Time.deltaTime;

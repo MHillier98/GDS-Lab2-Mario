@@ -26,6 +26,7 @@ public class KupaController : MonoBehaviour
             collision.attachedRigidbody.velocity = new Vector2(0f, 5f);
             Instantiate(shell, new Vector2(gameObject.transform.position.x, -2.5f), Quaternion.identity);
         }
+
         if (collision.tag == "Pipes")
         {
             rb.velocity *= -1;

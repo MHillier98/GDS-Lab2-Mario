@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Gumber : MonoBehaviour
 {
-
     public float moveSpeed;
     public bool moveRight;
     public bool stomped;
@@ -21,20 +20,18 @@ public class Gumber : MonoBehaviour
 
     public Sprite deadGoomba;
 
-    // Start is called before the first frame update
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         Sprite = GetComponent<SpriteRenderer>();
-        
     }
 
-    // Update is called once per frame
     void Update()
     {
         //Movement
         hittingWall = Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, whatIsWall);
+
         if (hittingWall)
         {
             moveRight = !moveRight;
@@ -51,7 +48,6 @@ public class Gumber : MonoBehaviour
             GetComponent<Rigidbody2D>().velocity = new Vector2(-moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
         }
 
-
         //Death
         if (stomped)
         {
@@ -59,7 +55,6 @@ public class Gumber : MonoBehaviour
             this.gameObject.GetComponent<Animator>().enabled = false;
             this.gameObject.GetComponent<SpriteRenderer>().sprite = deadGoomba;
             StartCoroutine(StompedGoomba());
-            
         }
     }
 
