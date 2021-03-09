@@ -185,7 +185,7 @@ public class PlayerController : MonoBehaviour
         //Goomba Kill Collision
         if (collider.tag == "EnemyHead")
         {
-            Gumber gumba = collider.gameObject.GetComponent<Gumber>();
+            Gumber gumba = collider.gameObject.GetComponentInParent<Gumber>();
             gumba.stomped = true;
             Jump();
         }
