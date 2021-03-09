@@ -22,19 +22,26 @@ public class ShellController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Mario" && isMoving == true)
+        if (collision.tag == "Mario")
         {
+            collision.attachedRigidbody.velocity = new Vector2(collision.attachedRigidbody.velocity.x, 5f);
             rb.velocity = new Vector2(0f, 0f);
-            collision.attachedRigidbody.AddForce(Vector2.up * 5f);
-            isMoving = false;
         }
+        
     }
-
+    
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.tag == "Mario" && isMoving == true)
         {
-            collision.gameObject.GetComponent<PlayerController>().MarioDead = true;
+            Debug.Log("died");
+            gameObject.GetComponent<PlayerController>().BeginReset(); // collision.gameObject.GetComponent<PlayerController>().MarioDead = true;
+            
+            //Destroy(collision.gameObject);
+        }
+        if (collision.collider.tag == "Pipes")
+        {
+            rb.velocity = new Vector2(-speed, rb.velocity.y);
         }
     }
 }

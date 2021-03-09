@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
 
     private float horizontalMovement;
     public bool isGrounded = false, MushroomPickup = false, MarioDead = false, IsBig = false, IsHit = false, Frozen = false;
-    private int coinCount;
+    private static int coinCount;
 
     //public bool BigMario = false;
     public Text coinCountText;
@@ -27,7 +27,9 @@ public class PlayerController : MonoBehaviour
     public GameObject MushroomPrefab;
     public GameObject CoinPrefab;
 
-    //public GameObject ParentObject;
+    public Text Score, Lives;
+    public static int lifeRemaining = 3;
+    public int scoreCount;
 
     private void Start()
     {
@@ -35,7 +37,6 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         Sprite = GetComponent<SpriteRenderer>();
         
-        coinCount=0;
     }
 
     private void Update()
@@ -62,9 +63,11 @@ public class PlayerController : MonoBehaviour
         if (MarioDead)
         {
             StartCoroutine(BeginReset());
-            //ResetLevel();
+            
         }
-
+        coinCountText.text = coinCount.ToString();
+        Lives.text = lifeRemaining.ToString();
+        Score.text = scoreCount.ToString();
         GroundCheck();
     }
 
@@ -96,6 +99,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void DeathScreen()
+    {
+        if (lifeRemaining == 0)
+        {
+            lifeRemaining = 3;
+            coinCount = 0;
+
+        }
+    } 
+
     private void GroundCheck()
     {
         float offsetX = 0.37f;
@@ -114,16 +127,16 @@ public class PlayerController : MonoBehaviour
         {
             collider.gameObject.GetComponentInChildren<CoinBlock>().BlockHit = true;
             collider.gameObject.GetComponentInParent<Animator>().SetBool("BlockHit", true);
-            //collider.gameObject.GetComponentInParent<Animator>().SetBool("BlockHit", true);
-            //if(collider.gameObject.GetComponentInChildren<CoinBlock>().Coin)
+            collider.gameObject.GetComponentInParent<Animator>().SetBool("BlockHit", true);
+            if(collider.gameObject.GetComponentInChildren<CoinBlock>().Coin)
             if(collider.gameObject.GetComponentInChildren<CoinBlock>().Coin)
                 coinCount++;
-            //CoinBlock hitBlock = collider.GetComponent<CoinBlock>();
-            //if(hitBlock.hitCount>0){
-            //   coinCount++;
-            //    coinCountText.text = "x"+coinCount;
-            //    hitBlock.hitCount--;
-            // }
+            CoinBlock hitBlock = collider.GetComponent<CoinBlock>();
+            if(hitBlock.hitCount>0){
+               coinCount++;
+                coinCountText.text = "x"+coinCount;
+                hitBlock.hitCount--;
+             }
         }*/
     }
 
@@ -139,6 +152,7 @@ public class PlayerController : MonoBehaviour
             {
                 //PlayAnimation
                 Destroy(collider.gameObject, 0.01f);
+               
             }
             if(!IsBig)
             {
@@ -164,7 +178,7 @@ public class PlayerController : MonoBehaviour
                     GameObject Coin = Instantiate(CoinPrefab, SpawnPos, Quaternion.identity) as GameObject;
                     StartCoroutine(ResetCoin(Anim, Coin));
                     coinCount++;
-                    coinCountText.text = "x" + coinCount;
+                    scoreCount += 200;
                 }
                 else if (collider.gameObject.GetComponentInChildren<CoinBlock>().Mushroom)
                 {
@@ -180,11 +194,11 @@ public class PlayerController : MonoBehaviour
             //animator.SetBool("MushroomGet", false);
             //animator.SetBool("IsBig", MushroomPickup);
             Destroy(collider.gameObject);
+            scoreCount += 1000;
         }
         if(collider.tag == "Coin")
         {
             coinCount++;
-            coinCountText.text = "x"+coinCount;
             Destroy(collider.gameObject);
         }
         if (collider.tag == "OutOfBounds")
@@ -227,6 +241,8 @@ public class PlayerController : MonoBehaviour
                 animator.SetBool("MarioHit", true);
                 IsHit = true;
                 StartCoroutine(MarioAnim());
+                //Anim of mario turning small
+                scoreCount += 200;
             }
         }
 
@@ -264,11 +280,13 @@ public class PlayerController : MonoBehaviour
         if (collision.collider.tag == "Shell" && collision.collider is BoxCollider2D)
         {
             collision.rigidbody.velocity = new Vector2(-10f, collision.rigidbody.velocity.y);
+        
         }
         else if (collision.collider.tag == "Shell" && collision.collider is CircleCollider2D)
         {
             collision.rigidbody.velocity = new Vector2(10f, collision.rigidbody.velocity.y);
         }
+        
     }
 
     IEnumerator MushroomAnim()
@@ -376,9 +394,10 @@ public class PlayerController : MonoBehaviour
         MarioDead = true;
     }
 
-    IEnumerator BeginReset()
+    public IEnumerator BeginReset()
     {
         yield return new WaitForSeconds(2.0f);
+        lifeRemaining -= 1;
         ResetLevel();
     }
 
