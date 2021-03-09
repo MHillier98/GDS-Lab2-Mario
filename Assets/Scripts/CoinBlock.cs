@@ -12,7 +12,7 @@ public class CoinBlock : MonoBehaviour
 
     public Sprite disabledSprite;
     SpriteRenderer spriteRenderer;
-    // Start is called before the first frame update
+
     void Start()
     {
         Anim = gameObject.GetComponent<Animator>();
@@ -22,29 +22,29 @@ public class CoinBlock : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(Mushroom)
+        if (Mushroom)
         {
             Coin = false;
         }
 
-        /*if(hitCount<=0 && Coin)
-        {
-            spriteRenderer.sprite = disabledSprite;
-        }
-        else if (hitCount == 12 && !Coin)
-        {
-            spriteRenderer.sprite = disabledSprite;
-        }*/
+        //if (hitCount <= 0 && Coin)
+        //{
+        //    spriteRenderer.sprite = disabledSprite;
+        //}
+        //else if (hitCount == 12 && !Coin)
+        //{
+        //    spriteRenderer.sprite = disabledSprite;
+        //}
 
-        if(Coin && BlockHit)
+        if (Coin && BlockHit)
         {
             //spriteRenderer.sprite = disabledSprite;
             //gameObject.GetComponentInParent<Animator>().SetBool("BlockHit", true);
             Anim.SetBool("Disabled", true);
         }
+
         if (Mushroom && BlockHit)
         {
             Anim.SetBool("Disabled", true);
