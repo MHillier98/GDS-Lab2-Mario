@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4024341393822513532}
   - component: {fileID: 7652444314782644507}
   - component: {fileID: 3714854574777707473}
+  - component: {fileID: 1713800309}
   m_Layer: 0
   m_Name: CoinBlock
   m_TagString: CoinBlock
@@ -150,4 +151,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitCount: 0
+  SpecialCoin: 1
   disabledSprite: {fileID: -3795585749407554063, guid: 92d311d7ea6e1714a9c662ed6f0f0978, type: 3}
+--- !u!95 &1713800309
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4024341393822513535}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 33bf8287fdb3c284695c3a509588c11a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
