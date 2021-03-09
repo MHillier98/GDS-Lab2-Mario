@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     private readonly float jumpForce = 220f;
 
     private float horizontalMovement;
-    public bool isGrounded = false, MushroomPickup = false, MarioDead = false, IsBig = false;
+    public bool isGrounded = false, MushroomPickup = false, MarioDead = false, IsBig = false, IsHit = false;
     private int coinCount;
 
     //public bool BigMario = false;
@@ -199,10 +199,16 @@ public class PlayerController : MonoBehaviour
 
         if(collider.tag == "Goomba")
         {
-            if (!IsBig)
+            if (!IsBig && !IsHit)
             {
                 //Debug.Log("Colliding");
-                animator.SetBool("IsDead", true);
+                animator.SetBool("MarioDead", true);
+                Vector2 StartPos = transform.position;
+                Vector2 EndPos = transform.position;
+                EndPos.y = EndPos.y + 1;
+                StartCoroutine(MarioDeath(StartPos, EndPos, 1.0f));
+
+                //StartCoroutine(MarioDeath());
                 //ParentObject.GetComponentInParent<Animator>().SetBool("IsDead", true);
                 //Animator ParentAnim = gameObject.GetComponentInParent<Animator>();
                 //ParentAnim.SetBool("IsDead", true);
@@ -215,6 +221,7 @@ public class PlayerController : MonoBehaviour
             {
                 IsBig = false;
                 animator.SetBool("MarioHit", true);
+                IsHit = true;
                 StartCoroutine(MarioAnim());
             }
         }
@@ -264,6 +271,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         animator.SetBool("IsBig", false);
         animator.SetBool("MarioHit", false);
+        IsHit = false;
     }
 
     IEnumerator ResetCoin(Animator Anim, GameObject CoinObject)
@@ -271,6 +279,41 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         Anim.SetBool("BlockHit", false);
         Destroy(CoinObject);
+    }
+
+    IEnumerator MarioDeath(Vector2 StartPos, Vector2 EndPos, float Duration)
+    {
+        float Timer = 0;
+        //Vector2 StartPosition = transform.position;
+        while (Timer < Duration)
+        {
+            transform.position = Vector2.Lerp(StartPos, EndPos, Timer / Duration);
+            Timer += Time.deltaTime;
+            yield return null;
+        }
+        transform.position = EndPos;
+        DeathDown();
+    }
+
+    private void DeathDown()
+    {
+        Vector2 CurrentPos = transform.position;
+        Vector2 EndPos = transform.position;
+        EndPos.y = EndPos.y - 5;
+        StartCoroutine(DeathDownAnim(CurrentPos, EndPos, 3.0f));
+    }
+
+    IEnumerator DeathDownAnim(Vector2 Start, Vector2 End, float Duration)
+    {
+        float Timer = 0;
+        while(Timer < Duration)
+        {
+            transform.position = Vector2.Lerp(Start, End, Timer / Duration);
+            Timer += Time.deltaTime;
+            yield return null;
+        }
+        transform.position = End;
+        MarioDead = true;
     }
 
     IEnumerator BeginReset()
