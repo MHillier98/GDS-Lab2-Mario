@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     private readonly float jumpForce = 220f;
 
     private float horizontalMovement;
-    private bool isGrounded = false, MushroomPickup = false, MarioDead = false;
+    public bool isGrounded = false, MushroomPickup = false, MarioDead = false, IsBig = false;
     private int coinCount;
 
     public bool BigMario = false;
@@ -92,9 +92,11 @@ public class PlayerController : MonoBehaviour
 
     private void GroundCheck()
     {
-        float offset = 0.37f;
-        Vector2 leftRayPos = new Vector2(transform.position.x + offset, transform.position.y);
-        Vector2 rightRayPos = new Vector2(transform.position.x - offset, transform.position.y);
+        float offsetX = 0.37f;
+        float offsetY = IsBig ? -0.5f : 0.0f;
+        
+        Vector2 leftRayPos = new Vector2(transform.position.x + offsetX, transform.position.y + offsetY);
+        Vector2 rightRayPos = new Vector2(transform.position.x - offsetX, transform.position.y + offsetY);
 
         bool onGround = Physics2D.Raycast(leftRayPos, -Vector3.up, 0.8f) || Physics2D.Raycast(rightRayPos, -Vector3.up, 0.8f);
         animator.SetBool("IsGrounded", onGround);
@@ -168,6 +170,8 @@ public class PlayerController : MonoBehaviour
         if (collider.tag == "Pickup")
         {
             MushroomPickup = true;
+            //animator.SetBool("MushroomGet", false);
+            //animator.SetBool("IsBig", MushroomPickup);
             Destroy(collider.gameObject);
         }
         if(collider.tag == "Coin")
@@ -217,6 +221,9 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(1.0f);
         MushroomPickup = false;
+        IsBig = true;
+        animator.SetBool("MushroomGet", false);
+        animator.SetBool("IsBig", true);
     }
 
     IEnumerator ResetBlock(Animator Anim)
