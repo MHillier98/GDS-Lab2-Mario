@@ -45,13 +45,13 @@ public class PlayerController : MonoBehaviour
             }
             isGrounded = false;
         }
-        if(MushroomPickup)
+        if (MushroomPickup)
         {
             animator.SetBool("MushroomGet", true);
             BigMario = true;
             StartCoroutine(MushroomAnim());
         }
-        if(MarioDead)
+        if (MarioDead)
         {
             ResetLevel();
         }
@@ -68,11 +68,11 @@ public class PlayerController : MonoBehaviour
 
             rb.AddForce(MovementDir);
 
-            if(MovementDir.x > 0)
+            if (MovementDir.x > 0)
             {
                 Sprite.flipX = false;
             }
-            if(MovementDir.x < 0)
+            if (MovementDir.x < 0)
             {
                 Sprite.flipX = true;
             }
@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour
         {
             isGrounded = true;
         }
-        if(collider.tag == "Pickup")
+        if (collider.tag == "Pickup")
         {
             MushroomPickup = true;
             Destroy(collider.gameObject);
@@ -119,24 +119,25 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Goomba Dead");
             rb.velocity = new Vector2(rb.velocity.x, bounceOnEnemy);
         }
-       
-        /*
+
+        
         //Going Down Pipe
-        if (collider.tag == "PipeDown" && Input.GetKeyDown('S'))
+        if (collider.tag == "PipeDown" && Input.GetKeyDown(KeyCode.S))
         {
             goingDown = true;
             StartCoroutine(PipeDown());
             
         }
-        */
+        
     }
+
 
     IEnumerator MushroomAnim()
     {
         yield return new WaitForSeconds(1.0f);
         MushroomPickup = false;
     }
-   
+
     public void ResetLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -149,6 +150,6 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(1f);
         goingDown = false;
         Debug.Log("Loading Underground");
-        //SceneManager.LoadScene(Underground);
+        SceneManager.LoadScene(Underground);
     }
 }
