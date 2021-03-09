@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     private readonly float jumpForce = 220f;
 
     private float horizontalMovement;
-    public bool isGrounded = false, MushroomPickup = false, MarioDead = false, IsBig = false, IsHit = false;
+    public bool isGrounded = false, MushroomPickup = false, MarioDead = false, IsBig = false, IsHit = false, Frozen = false;
     private int coinCount;
 
     //public bool BigMario = false;
@@ -40,13 +40,16 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (isGrounded)
+        if (!Frozen)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (isGrounded)
             {
-                Jump();
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    Jump();
+                }
+                isGrounded = false;
             }
-            isGrounded = false;
         }
 
         if (MushroomPickup && !IsBig)
@@ -72,7 +75,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!MushroomPickup)
+        if (!MushroomPickup && !Frozen)
         {
             horizontalMovement = Input.GetAxis("Horizontal");
             Vector2 MovementDir = new Vector2(horizontalMovement * speed * 7f, rb.velocity.y);
@@ -172,7 +175,8 @@ public class PlayerController : MonoBehaviour
         }
         if (collider.tag == "Pickup")
         {
-            MushroomPickup = true;
+            if(!IsBig)
+                MushroomPickup = true;
             //animator.SetBool("MushroomGet", false);
             //animator.SetBool("IsBig", MushroomPickup);
             Destroy(collider.gameObject);
@@ -226,6 +230,24 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        if(collider.tag == "Flag")
+        {
+            Frozen = true;
+            if(IsBig)
+            {
+                //BigAnim
+                animator.SetBool("FlagGrab", true);
+            }
+            else if(!IsBig)
+            {
+                animator.SetBool("FlagGrab", true);
+            }
+            rb.gravityScale = 2;
+            rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+
+            StartCoroutine(VictoryAnimation());
+        }
+
         /*
         //Going Down Pipe
         if (collider.tag == "PipeDown" && Input.GetKeyDown('S'))
@@ -264,6 +286,44 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.3f);
         Anim.SetBool("BlockHit", false);
+    }
+
+    IEnumerator VictoryAnimation()
+    {
+        yield return new WaitForSeconds(1.5f);
+        if(IsBig)
+        {
+            animator.SetBool("VictoryRun", true);
+            //BigRun
+        }
+        else if (!IsBig)
+        {
+            animator.SetBool("VictoryRun", true);
+            //SmallRun
+        }
+        Vector2 CurrentPos = transform.position;
+        Vector2 CastlePos = transform.position;
+        CastlePos.x = transform.position.x + 7f;
+        if (!IsBig)
+            CastlePos.y = transform.position.y - 1f;
+        else if (IsBig)
+            CastlePos.y = transform.position.y - 0.5f;
+        StartCoroutine(Victory(CurrentPos, CastlePos, 3.0f));
+
+    }
+
+    IEnumerator Victory(Vector2 Current, Vector2 End, float Duration)
+    {
+        float Timer = 0;
+        while(Timer < Duration)
+        {
+            transform.position = Vector2.Lerp(Current, End, Timer / Duration);
+            Timer += Time.deltaTime;
+            yield return null;
+        }
+        transform.position = End;
+        //Destroy(this);
+        animator.SetBool("Disappeared", true);
     }
 
     IEnumerator MarioAnim()

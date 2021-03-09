@@ -113,6 +113,18 @@ TextureImporter:
   - first:
       213: 1735141381091675341
     second: MarioInvis
+  - first:
+      213: -5028026100049060238
+    second: MarioLuigi_37
+  - first:
+      213: 914134616814691368
+    second: MarioLuigi_38
+  - first:
+      213: -6927874422596229002
+    second: MarioLuigi_39
+  - first:
+      213: -4027843815436794564
+    second: MarioLuigi_40
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -966,7 +978,7 @@ TextureImporter:
         width: 4
         height: 4
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -974,6 +986,90 @@ TextureImporter:
       bones: []
       spriteID: dcccc0794e5741810800000000000000
       internalID: 1735141381091675341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MarioLuigi_37
+      rect:
+        serializedVersion: 2
+        x: 246
+        y: 242
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27ede21d6ecd83ab0800000000000000
+      internalID: -5028026100049060238
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MarioLuigi_38
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 242
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 824a0283798afac00800000000000000
+      internalID: 914134616814691368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MarioLuigi_39
+      rect:
+        serializedVersion: 2
+        x: 246
+        y: 209
+        width: 16
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67823a80bee3bdf90800000000000000
+      internalID: -6927874422596229002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MarioLuigi_40
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 209
+        width: 16
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c35c22ae3693a18c0800000000000000
+      internalID: -4027843815436794564
       vertices: []
       indices: 
       edges: []
