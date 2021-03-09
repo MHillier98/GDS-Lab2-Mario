@@ -59,6 +59,7 @@ public class Gumber : MonoBehaviour
             this.gameObject.GetComponent<Animator>().enabled = false;
             this.gameObject.GetComponent<SpriteRenderer>().sprite = deadGoomba;
             StartCoroutine(StompedGoomba());
+            
         }
     }
 
