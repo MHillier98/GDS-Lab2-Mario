@@ -168,6 +168,8 @@ public class PlayerController : MonoBehaviour
         if (collider.tag == "Pickup")
         {
             MushroomPickup = true;
+            //animator.SetBool("MushroomGet", false);
+            //animator.SetBool("IsBig", MushroomPickup);
             Destroy(collider.gameObject);
         }
         if(collider.tag == "Coin")
@@ -217,6 +219,8 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(1.0f);
         MushroomPickup = false;
+        animator.SetBool("MushroomGet", false);
+        animator.SetBool("IsBig", true);
     }
 
     IEnumerator ResetBlock(Animator Anim)
