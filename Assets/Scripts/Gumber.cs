@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Gumber : MonoBehaviour
 {
-    public float moveSpeed;
+    public float moveSpeed = 5f;
     public bool moveRight;
     public bool stomped;
 
@@ -12,6 +12,7 @@ public class Gumber : MonoBehaviour
     public float wallCheckRadius;
     public LayerMask whatIsWall;
     private bool hittingWall;
+    
 
 
     private Rigidbody2D rb;
