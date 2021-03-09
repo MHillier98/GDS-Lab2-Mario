@@ -47,16 +47,17 @@ public class PlayerController : MonoBehaviour
             isGrounded = false;
         }
 
-        if (MushroomPickup)
+        if (MushroomPickup && !BigMario)
         {
             animator.SetBool("MushroomGet", true);
-            BigMario = true;
+            //MushroomPickup = false;
             StartCoroutine(MushroomAnim());
         }
 
         if (MarioDead)
         {
-            ResetLevel();
+            StartCoroutine(BeginReset());
+            //ResetLevel();
         }
 
         GroundCheck();
@@ -152,11 +153,11 @@ public class PlayerController : MonoBehaviour
                 Vector2 SpawnPos = new Vector2(CurrentPos.x, CurrentPos.y);
                 SpawnPos.y = CurrentPos.y + 1;
                 SpawnPos.x = CurrentPos.x - 0.5f;
- 
+
                 if (collider.gameObject.GetComponentInChildren<CoinBlock>().Coin)
                 {
                     GameObject Coin = Instantiate(CoinPrefab, SpawnPos, Quaternion.identity) as GameObject;
-                    StartCoroutine(ResetCoin(Anim, Coin));                   
+                    StartCoroutine(ResetCoin(Anim, Coin));
                     coinCount++;
                     coinCountText.text = "x" + coinCount;
                 }
@@ -194,6 +195,23 @@ public class PlayerController : MonoBehaviour
             Jump();
         }
 
+        if(collider.tag == "Goomba")
+        {
+            if (!BigMario)
+            {
+                //Begin death animation
+                //MarioDead = true;
+            }
+            else if (BigMario)
+            {
+                BigMario = false;
+                animator.SetBool("MarioHit", true);
+                StartCoroutine(MarioAnim());
+                //Anim of mario turning small
+            }
+            Debug.Log("Player hit");
+        }
+
         /*
         //Going Down Pipe
         if (collider.tag == "PipeDown" && Input.GetKeyDown('S'))
@@ -220,7 +238,9 @@ public class PlayerController : MonoBehaviour
     IEnumerator MushroomAnim()
     {
         yield return new WaitForSeconds(1.0f);
+        animator.SetBool("MushroomGet", false);
         MushroomPickup = false;
+        BigMario = true;
         IsBig = true;
         animator.SetBool("MushroomGet", false);
         animator.SetBool("IsBig", true);
@@ -232,6 +252,12 @@ public class PlayerController : MonoBehaviour
         Anim.SetBool("BlockHit", false);
     }
 
+    IEnumerator MarioAnim()
+    {
+        yield return new WaitForSeconds(1.0f);
+        animator.SetBool("MarioHit", false);
+    }
+
     IEnumerator ResetCoin(Animator Anim, GameObject CoinObject)
     {
         yield return new WaitForSeconds(0.3f);
@@ -239,8 +265,15 @@ public class PlayerController : MonoBehaviour
         Destroy(CoinObject);
     }
 
+    IEnumerator BeginReset()
+    {
+        yield return new WaitForSeconds(2.0f);
+        ResetLevel();
+    }
+
     public void ResetLevel()
     {
+        //life - 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 

@@ -110,6 +110,9 @@ TextureImporter:
   - first:
       213: 780825864153678579
     second: MarioLuigi_35
+  - first:
+      213: 1735141381091675341
+    second: MarioInvis
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -950,6 +953,27 @@ TextureImporter:
       bones: []
       spriteID: 3f241588cfc06da00800000000000000
       internalID: 780825864153678579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MarioInvis
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 171
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dcccc0794e5741810800000000000000
+      internalID: 1735141381091675341
       vertices: []
       indices: 
       edges: []
