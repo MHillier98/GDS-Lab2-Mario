@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     public bool isGrounded = false, MushroomPickup = false, MarioDead = false, IsBig = false;
     private int coinCount;
 
-    public bool BigMario = false;
+    //public bool BigMario = false;
     public Text coinCountText;
 
     //private bool goingDown = false;
@@ -26,6 +26,8 @@ public class PlayerController : MonoBehaviour
 
     public GameObject MushroomPrefab;
     public GameObject CoinPrefab;
+
+    //public GameObject ParentObject;
 
     private void Start()
     {
@@ -47,7 +49,7 @@ public class PlayerController : MonoBehaviour
             isGrounded = false;
         }
 
-        if (MushroomPickup && !BigMario)
+        if (MushroomPickup && !IsBig)
         {
             animator.SetBool("MushroomGet", true);
             //MushroomPickup = false;
@@ -130,12 +132,12 @@ public class PlayerController : MonoBehaviour
         }
         if (collider.tag == "BreakableBlock")
         {
-            if (BigMario)
+            if (IsBig)
             {
                 //PlayAnimation
                 Destroy(collider.gameObject, 0.01f);
             }
-            if(!BigMario)
+            if(!IsBig)
             {
                 Animator Anim = collider.gameObject.GetComponentInParent<Animator>();
                 collider.gameObject.GetComponentInParent<Animator>().SetBool("BlockHit", true);
@@ -197,19 +199,24 @@ public class PlayerController : MonoBehaviour
 
         if(collider.tag == "Goomba")
         {
-            if (!BigMario)
+            if (!IsBig)
             {
+                //Debug.Log("Colliding");
+                animator.SetBool("IsDead", true);
+                //ParentObject.GetComponentInParent<Animator>().SetBool("IsDead", true);
+                //Animator ParentAnim = gameObject.GetComponentInParent<Animator>();
+                //ParentAnim.SetBool("IsDead", true);
                 //Begin death animation
                 //MarioDead = true;
+                //rb.
+                //ParentObject.GetComponent<Animator>().SetBool("IsDead", true);
             }
-            else if (BigMario)
+            else if (IsBig)
             {
-                BigMario = false;
+                IsBig = false;
                 animator.SetBool("MarioHit", true);
                 StartCoroutine(MarioAnim());
-                //Anim of mario turning small
             }
-            Debug.Log("Player hit");
         }
 
         /*
@@ -240,7 +247,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         animator.SetBool("MushroomGet", false);
         MushroomPickup = false;
-        BigMario = true;
+        //BigMario = true;
         IsBig = true;
         animator.SetBool("MushroomGet", false);
         animator.SetBool("IsBig", true);
@@ -255,6 +262,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator MarioAnim()
     {
         yield return new WaitForSeconds(1.0f);
+        animator.SetBool("IsBig", false);
         animator.SetBool("MarioHit", false);
     }
 
