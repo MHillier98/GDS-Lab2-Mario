@@ -15,10 +15,10 @@ public class PlayerController : MonoBehaviour
     private readonly float jumpForce = 220f;
 
     private float horizontalMovement;
-    public bool isGrounded = false, MushroomPickup = false, MarioDead = false, IsBig = false;
+    public bool isGrounded = false, MushroomPickup = false, MarioDead = false, IsBig = false, IsHit = false, Frozen = false;
     private static int coinCount;
 
-    public bool BigMario = false;
+    //public bool BigMario = false;
     public Text coinCountText;
 
     //private bool goingDown = false;
@@ -31,7 +31,6 @@ public class PlayerController : MonoBehaviour
     public static int lifeRemaining = 3;
     public int scoreCount;
 
-
     private void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
@@ -42,16 +41,19 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (isGrounded)
+        if (!Frozen)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (isGrounded)
             {
-                Jump();
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    Jump();
+                }
+                isGrounded = false;
             }
-            isGrounded = false;
         }
 
-        if (MushroomPickup && !BigMario)
+        if (MushroomPickup && !IsBig)
         {
             animator.SetBool("MushroomGet", true);
             //MushroomPickup = false;
@@ -76,7 +78,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!MushroomPickup)
+        if (!MushroomPickup && !Frozen)
         {
             horizontalMovement = Input.GetAxis("Horizontal");
             Vector2 MovementDir = new Vector2(horizontalMovement * speed * 7f, rb.velocity.y);
@@ -146,13 +148,13 @@ public class PlayerController : MonoBehaviour
         }
         if (collider.tag == "BreakableBlock")
         {
-            if (BigMario)
+            if (IsBig)
             {
                 //PlayAnimation
                 Destroy(collider.gameObject, 0.01f);
                
             }
-            if(!BigMario)
+            if(!IsBig)
             {
                 Animator Anim = collider.gameObject.GetComponentInParent<Animator>();
                 collider.gameObject.GetComponentInParent<Animator>().SetBool("BlockHit", true);
@@ -187,7 +189,8 @@ public class PlayerController : MonoBehaviour
         }
         if (collider.tag == "Pickup")
         {
-            MushroomPickup = true;
+            if(!IsBig)
+                MushroomPickup = true;
             //animator.SetBool("MushroomGet", false);
             //animator.SetBool("IsBig", MushroomPickup);
             Destroy(collider.gameObject);
@@ -214,20 +217,51 @@ public class PlayerController : MonoBehaviour
 
         if(collider.tag == "Goomba")
         {
-            if (!BigMario)
+            if (!IsBig && !IsHit)
             {
+                //Debug.Log("Colliding");
+                animator.SetBool("MarioDead", true);
+                Vector2 StartPos = transform.position;
+                Vector2 EndPos = transform.position;
+                EndPos.y = EndPos.y + 1;
+                StartCoroutine(MarioDeath(StartPos, EndPos, 1.0f));
+
+                //StartCoroutine(MarioDeath());
+                //ParentObject.GetComponentInParent<Animator>().SetBool("IsDead", true);
+                //Animator ParentAnim = gameObject.GetComponentInParent<Animator>();
+                //ParentAnim.SetBool("IsDead", true);
                 //Begin death animation
                 //MarioDead = true;
+                //rb.
+                //ParentObject.GetComponent<Animator>().SetBool("IsDead", true);
             }
-            else if (BigMario)
+            else if (IsBig)
             {
-                BigMario = false;
+                IsBig = false;
                 animator.SetBool("MarioHit", true);
+                IsHit = true;
                 StartCoroutine(MarioAnim());
                 //Anim of mario turning small
                 scoreCount += 200;
             }
-            Debug.Log("Player hit");
+        }
+
+        if(collider.tag == "Flag")
+        {
+            Frozen = true;
+            if(IsBig)
+            {
+                //BigAnim
+                animator.SetBool("FlagGrab", true);
+            }
+            else if(!IsBig)
+            {
+                animator.SetBool("FlagGrab", true);
+            }
+            rb.gravityScale = 2;
+            rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+
+            StartCoroutine(VictoryAnimation());
         }
 
         /*
@@ -260,7 +294,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         animator.SetBool("MushroomGet", false);
         MushroomPickup = false;
-        BigMario = true;
+        //BigMario = true;
         IsBig = true;
         animator.SetBool("MushroomGet", false);
         animator.SetBool("IsBig", true);
@@ -272,10 +306,50 @@ public class PlayerController : MonoBehaviour
         Anim.SetBool("BlockHit", false);
     }
 
+    IEnumerator VictoryAnimation()
+    {
+        yield return new WaitForSeconds(1.5f);
+        if(IsBig)
+        {
+            animator.SetBool("VictoryRun", true);
+            //BigRun
+        }
+        else if (!IsBig)
+        {
+            animator.SetBool("VictoryRun", true);
+            //SmallRun
+        }
+        Vector2 CurrentPos = transform.position;
+        Vector2 CastlePos = transform.position;
+        CastlePos.x = transform.position.x + 7f;
+        if (!IsBig)
+            CastlePos.y = transform.position.y - 1f;
+        else if (IsBig)
+            CastlePos.y = transform.position.y - 0.5f;
+        StartCoroutine(Victory(CurrentPos, CastlePos, 3.0f));
+
+    }
+
+    IEnumerator Victory(Vector2 Current, Vector2 End, float Duration)
+    {
+        float Timer = 0;
+        while(Timer < Duration)
+        {
+            transform.position = Vector2.Lerp(Current, End, Timer / Duration);
+            Timer += Time.deltaTime;
+            yield return null;
+        }
+        transform.position = End;
+        //Destroy(this);
+        animator.SetBool("Disappeared", true);
+    }
+
     IEnumerator MarioAnim()
     {
         yield return new WaitForSeconds(1.0f);
+        animator.SetBool("IsBig", false);
         animator.SetBool("MarioHit", false);
+        IsHit = false;
     }
 
     IEnumerator ResetCoin(Animator Anim, GameObject CoinObject)
@@ -283,6 +357,41 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         Anim.SetBool("BlockHit", false);
         Destroy(CoinObject);
+    }
+
+    IEnumerator MarioDeath(Vector2 StartPos, Vector2 EndPos, float Duration)
+    {
+        float Timer = 0;
+        //Vector2 StartPosition = transform.position;
+        while (Timer < Duration)
+        {
+            transform.position = Vector2.Lerp(StartPos, EndPos, Timer / Duration);
+            Timer += Time.deltaTime;
+            yield return null;
+        }
+        transform.position = EndPos;
+        DeathDown();
+    }
+
+    private void DeathDown()
+    {
+        Vector2 CurrentPos = transform.position;
+        Vector2 EndPos = transform.position;
+        EndPos.y = EndPos.y - 5;
+        StartCoroutine(DeathDownAnim(CurrentPos, EndPos, 3.0f));
+    }
+
+    IEnumerator DeathDownAnim(Vector2 Start, Vector2 End, float Duration)
+    {
+        float Timer = 0;
+        while(Timer < Duration)
+        {
+            transform.position = Vector2.Lerp(Start, End, Timer / Duration);
+            Timer += Time.deltaTime;
+            yield return null;
+        }
+        transform.position = End;
+        MarioDead = true;
     }
 
     public IEnumerator BeginReset()

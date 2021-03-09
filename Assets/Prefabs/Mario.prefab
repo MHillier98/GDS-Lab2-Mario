@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 7348827867128527865}
   m_Layer: 0
   m_Name: Mario
-  m_TagString: Untagged
+  m_TagString: Mario
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -162,10 +162,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4567c2b1c01a3c4b83948246aee06da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BigMario: 0
-  goomba: {fileID: 0}
-  bounceOnEnemy: 0
+  isGrounded: 0
+  MushroomPickup: 0
+  MarioDead: 0
+  IsBig: 0
+  coinCountText: {fileID: 0}
   goingDownPipe: {fileID: 0}
+  MushroomPrefab: {fileID: 3108230700285842100, guid: b2e35f3c0ee591b4d903226b5db4be54, type: 3}
+  CoinPrefab: {fileID: 3108230700285842100, guid: f32cf587756274eef88ba2326d34bcbe, type: 3}
 --- !u!95 &7348827867128527865
 Animator:
   serializedVersion: 3

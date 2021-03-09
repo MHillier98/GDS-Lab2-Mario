@@ -4,16 +4,14 @@ using UnityEngine;
 
 public class ShellController : MonoBehaviour
 {
-    bool isMoving = false;
-    Rigidbody2D rb;
-    float speed = 8f;
+    public bool isMoving = false;
+    public Rigidbody2D rb;
 
     void Start()
     {
         rb = this.GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (rb.velocity != new Vector2(0f, 0f))
@@ -37,7 +35,7 @@ public class ShellController : MonoBehaviour
         if (collision.collider.tag == "Mario" && isMoving == true)
         {
             Debug.Log("died");
-            gameObject.GetComponent<PlayerController>().BeginReset();
+            gameObject.GetComponent<PlayerController>().BeginReset(); // collision.gameObject.GetComponent<PlayerController>().MarioDead = true;
             
             //Destroy(collision.gameObject);
         }
