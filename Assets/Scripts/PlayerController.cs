@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     //public bool BigMario = false;
     public Text coinCountText;
 
-    //private bool goingDown = false;
+    private bool goingDown = false;
     public Animator goingDownPipe;
 
     public GameObject MushroomPrefab;
@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
     public Text Score, Lives;
     public static int lifeRemaining = 3;
     public int scoreCount;
+
+    
 
     private void Start()
     {
@@ -56,6 +58,7 @@ public class PlayerController : MonoBehaviour
         if (MushroomPickup && !IsBig)
         {
             animator.SetBool("MushroomGet", true);
+            FindObjectOfType<AudioManager>().Play("PowerUpSound");
             //MushroomPickup = false;
             StartCoroutine(MushroomAnim());
         }
@@ -78,6 +81,7 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {
         rb.AddForce(Vector2.up * jumpForce * 120f);
+        FindObjectOfType<AudioManager>().Play("JumpSound");
     }
 
     private void FixedUpdate()
@@ -137,6 +141,7 @@ public class PlayerController : MonoBehaviour
             {
                 //PlayAnimation
                 Destroy(collider.gameObject, 0.01f);
+                FindObjectOfType<AudioManager>().Play("BreakBoxSound");
             }
             else
             {
@@ -162,6 +167,7 @@ public class PlayerController : MonoBehaviour
                 {
                     GameObject Coin = Instantiate(CoinPrefab, SpawnPos, Quaternion.identity) as GameObject;
                     StartCoroutine(ResetCoin(Anim, Coin));
+                    FindObjectOfType<AudioManager>().Play("CoinSound");
                     coinCount++;
                     scoreCount += 200;
                 }
@@ -188,12 +194,14 @@ public class PlayerController : MonoBehaviour
         if (collider.tag == "Coin")
         {
             coinCount++;
+            FindObjectOfType<AudioManager>().Play("CoinSound");
             Destroy(collider.gameObject);
         }
 
         if (collider.tag == "OutOfBounds")
         {
             MarioDead = true;
+            FindObjectOfType<AudioManager>().Play("DeathSound");
             //Debug.Log("Player dead");
         }
 
@@ -202,6 +210,7 @@ public class PlayerController : MonoBehaviour
         {
             Gumber gumba = collider.gameObject.GetComponentInParent<Gumber>();
             gumba.stomped = true;
+            FindObjectOfType<AudioManager>().Play("StompSound");
             Jump();
         }
 
@@ -247,11 +256,12 @@ public class PlayerController : MonoBehaviour
         }
 
         //Going Down Pipe
-        //if (collider.tag == "PipeDown" && Input.GetKeyDown('S'))
-        //{
-        //    goingDown = true;
-        //    StartCoroutine(PipeDown());
-        //}
+        if (collider.tag == "PipeDown" && Input.GetKeyDown(KeyCode.S))
+        {
+            goingDown = true;
+            StartCoroutine(PipeDown());
+            FindObjectOfType<AudioManager>().Play("PipeSound");
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -259,7 +269,7 @@ public class PlayerController : MonoBehaviour
         if (collision.collider.tag == "Shell" && collision.collider is BoxCollider2D)
         {
             collision.rigidbody.velocity = new Vector2(-10f, collision.rigidbody.velocity.y);
-
+            FindObjectOfType<AudioManager>().Play("KickSound");
         }
         else if (collision.collider.tag == "Shell" && collision.collider is CircleCollider2D)
         {
@@ -287,6 +297,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator VictoryAnimation()
     {
         yield return new WaitForSeconds(1.5f);
+        FindObjectOfType<AudioManager>().Play("VictorySound");
         if (IsBig)
         {
             animator.SetBool("VictoryRun", true);
@@ -351,6 +362,7 @@ public class PlayerController : MonoBehaviour
         {
             transform.position = Vector2.Lerp(StartPos, EndPos, Timer / Duration);
             Timer += Time.deltaTime;
+            FindObjectOfType<AudioManager>().Play("DeathSound");
             yield return null;
         }
         transform.position = EndPos;
@@ -396,8 +408,8 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Going Down Pipe");
         yield return new WaitForSeconds(1f);
-        //goingDown = false;
+        goingDown = false;
         Debug.Log("Loading Underground");
-        //SceneManager.LoadScene(Underground);
+        SceneManager.LoadScene("UndergroundScene");
     }
 }
