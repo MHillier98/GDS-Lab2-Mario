@@ -11,7 +11,7 @@ public class Gumber : MonoBehaviour
     public Transform wallCheck;
     public float wallCheckRadius;
     public LayerMask whatIsWall;
-    private bool hittingWall;
+    private bool hittingWall = false;
 
 
     private Rigidbody2D rb;
@@ -51,12 +51,28 @@ public class Gumber : MonoBehaviour
         //Death
         if (stomped)
         {
-            this.rb.velocity = Vector3.zero;
+            this.rb.velocity = Vector2.zero;
             this.gameObject.GetComponent<Animator>().enabled = false;
             this.gameObject.GetComponent<SpriteRenderer>().sprite = deadGoomba;
             StartCoroutine(StompedGoomba());
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.tag == "Mario")
+        {
+            collision.gameObject.GetComponent<PlayerController>().BeginReset();
+        }
+
+        /*if (collision.collider.tag == "Pipes")
+        {
+            hittingWall = true;
+            Debug.Log("Collided with pipe");
+        }*/
+    }
+
+
 
     //Coroutine for the goomba death
     private IEnumerator StompedGoomba()
